@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import "./PhotoRank.css";
 
@@ -99,6 +99,28 @@ const PhotoRankingApp: React.FC = () => {
     checkStabilization();
   }, [iteration, photos]);
 
+  // create call back function to handle keydown event
+
+  useEffect(() => {
+    console.log("useEffect");
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") {
+        handlePhotoSelection(0);
+
+        console.log("arror left");
+      } else if (event.key === "ArrowRight") {
+        handlePhotoSelection(1);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handlePhotoSelection]);
+
   return (
     <div>
       <div className="grid-container">
@@ -119,21 +141,25 @@ const PhotoRankingApp: React.FC = () => {
         </div>
       </div>
       <div>
-        <h2>Rankings</h2>
-        <h3>{stabilized ? "Order is stable" : "Keep ranking"} </h3>
-
-        <ol>
-          {photos
-            .sort((a, b) => b.rating - a.rating)
-            .map((photo) => (
-              <li key={photo.id}>
-                {photo.id}: {photo.rating}
-              </li>
-            ))}
-        </ol>
+        <h2 className="title">Rankings</h2>
+        <PhotoGrid photos={photos.sort((a, b) => b.rating - a.rating)} />
       </div>
     </div>
   );
 };
+
+function PhotoGrid({ photos }: { photos: Photo[] }) {
+  return (
+    <div className="photo-grid">
+      {photos.map((photo) => (
+        <div className="photo" key={photo.id}>
+          <img src={`photos/${photo.url}`} alt={`Photo ${photo.id}`} />
+          <p>ID: {photo.id}</p>
+          <p>Ranking: {photo.rating.toFixed(0)}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default PhotoRankingApp;
