@@ -155,6 +155,10 @@ const PhotoRankingApp: React.FC = () => {
       </div>
       <div>
         <h2 className="title">Rankings</h2>
+        {
+          // stabilized check isn't working right now
+          stabilized ? "" : ""
+        }
         <PhotoGrid photos={photos.sort((a, b) => b.rating - a.rating)} />
       </div>
     </div>
