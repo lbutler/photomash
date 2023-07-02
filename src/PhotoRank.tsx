@@ -12,9 +12,10 @@ interface Photo {
 const createPhotosArray = (): Photo[] => {
   const initialPhotos = [];
 
-  for (let i = 1; i <= 72; i++) {
+  for (let i = 1; i <= 10; i++) {
     const id = i;
-    const url = `${String(i).padStart(3, "0")}.jpg`;
+    const rndId = Math.floor(Math.random() * 1000) + 1;
+    const url = `https://picsum.photos/seed/${rndId}/500/500`;
     const rating = 1000;
     const score = 0;
 
@@ -138,7 +139,7 @@ const PhotoRankingApp: React.FC = () => {
       <div className="grid-container">
         <div>
           <div className="image-container">
-            <img src={`photos/${photos[photoIndex1].url}`} alt="Photo 1" />
+            <img src={photos[photoIndex1].url} alt="Photo 1" />
           </div>
 
           <h2>{photos[photoIndex1].id}</h2>
@@ -146,7 +147,7 @@ const PhotoRankingApp: React.FC = () => {
         </div>
         <div>
           <div className="image-container">
-            <img src={`photos/${photos[photoIndex2].url}`} alt="Photo 2" />
+            <img src={photos[photoIndex2].url} alt="Photo 2" />
           </div>
           <h2>{photos[photoIndex2].id}</h2>
           <button onClick={() => handlePhotoSelection(1)}>Choose</button>
@@ -165,7 +166,7 @@ function PhotoGrid({ photos }: { photos: Photo[] }) {
     <div className="photo-grid">
       {photos.map((photo) => (
         <div className="photo" key={photo.id}>
-          <img src={`photos/${photo.url}`} alt={`Photo ${photo.id}`} />
+          <img src={photo.url} alt={`Photo ${photo.id}`} />
           <p>ID: {photo.id}</p>
           <p>Ranking: {photo.rating.toFixed(0)}</p>
         </div>
